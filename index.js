@@ -7,7 +7,12 @@
 const fs = require('fs');
 
 
-
+/**
+ * Reads in a file and parses it into an array of messages.
+ * 
+ * @param {String} filename file location
+ * @param {Function} callback the function to be called with the messages array
+ */
 function parseFileIntoMessages(filename, callback) {
   // load the file and return an array of messages
 
@@ -33,7 +38,15 @@ function parseFileIntoMessages(filename, callback) {
   });
 }
 
-// only allow messages that were sent after a certain time
+/**
+ * In Collective Journaling, each participant can share a part of their personal journal with the group.
+ * This happens at the end of the meeting, after breakout groups. It is usually around 9:25am.
+ * The purpose of this function is to filter out messages that were sent before 9:25am, so only the shares are left.
+ * 
+ * @param {Array} messages array of messages
+ * @param {String} timestamp a timestamp string in the format 'hh:mm:ss'
+ * @returns 
+ */
 function filterMessagesAfterTimestamp(messages, timestamp)  {
 
   let filterTimestampInSeconds = (timestamp.split(':')[0] * 60 * 60) + (timestamp.split(':')[1] * 60) + timestamp.split(':')[2];
@@ -64,6 +77,18 @@ function filterMessagesAfterTimestamp(messages, timestamp)  {
   });
 }
 
+/**
+ * The way Zoom chat messages are formatted, there are three types of messages:
+ * 1. Top-Level comments. In our nomenclature we will call them "Shares"
+ * 2. Replies to top-level comments. "Replies".
+ * 3. Emoji Reactions to any comment (both Shares and Replies). "Reacts".
+ * 
+ * This function filters the messages into these three types.
+ * 
+ * @param {Array} messages array of messages
+ * 
+ * @returns Messages are filtered into three types: Share, Reacts, Replies
+ */
 function filterMessageTypes(messages) {
 
   // three messages types: Share, Reacts, Replies
@@ -91,6 +116,11 @@ function filterMessageTypes(messages) {
   };
 }
 
+/**
+ * 
+ * @param {*} firstLine 
+ * @returns 
+ */
 function parseFirstLineIntoParts(firstLine) {
 
   // a regex that looks like this:
@@ -111,11 +141,81 @@ function parseFirstLineIntoParts(firstLine) {
   };
 }
 
+function parseReactMessage(reactMessage) {
+  //console.log(reactMessage);
 
-parseFileIntoMessages('chats/2023-08-09.txt', (messages) => {
+  // great. fuck. we need a case where the Original Share goes into two lines
+  // Example:
+  // 	I am not awake, 
+	// But I am so alive.
+
+  let reactLine = reactMessage[1];
+
+  // a regex that looks like this:
+  // \tReacted to "${MessageBeginning}..." with ${Emoji}
+  // \tReacted to "I'm doing well. I'm..." with 👍
+  let reactLineRegex = /^\tReacted to "([^"]+)" with ([^"]+)/;
+  let reactLineParts = reactLine.match(reactLineRegex);
+  //console.log(reactLineParts);
+  // remove the last three dots from the message beginning
+  let messageBeginning = reactLineParts[1].slice(0, -3);
+  let emoji = reactLineParts[2];
+  // console.log(messageBeginning, emoji);
+
+  return {
+    timestamp: reactMessage[0].timestamp,
+    sender: reactMessage[0].sender,
+    messageBeginning: messageBeginning,
+    emoji: emoji
+  }
+}
+
+const FILE_DB = [
+  {
+    // √√√
+    "sharetime": "09:25:00",
+    "filename": "2023-07-31.txt"
+  },
+  {
+    // FAILS
+    "sharetime": "09:25:00",
+    "filename": "2023-08-01.txt"
+  },
+  {
+    // √√√
+    "sharetime": "09:25:00",
+    "filename": "2023-08-02.txt"
+  },
+  {
+    "sharetime": "09:25:00",
+    "filename": "2023-08-04.txt"
+  },
+  {
+    // FAILS
+    "sharetime": "09:25:00",
+    "filename": "2023-08-07.txt"
+  },
+  {
+    "sharetime": "09:25:00",
+    "filename": "2023-08-08.txt"
+  },
+  {
+    // BEST DEMO
+    "sharetime": "09:25:00",
+    "filename": "2023-08-09.txt"
+  },
+  {
+    // FAILS
+    "sharetime": "09:25:00",
+    "filename": "2023-08-10.txt"
+  },
+]
+let fileIndex = 6;
+
+parseFileIntoMessages(`chats/${FILE_DB[fileIndex].filename}`, (messages) => {
   //console.log(messages);
 
-  let afterTS = filterMessagesAfterTimestamp(messages, '09:25:00');
+  let afterTS = filterMessagesAfterTimestamp(messages, FILE_DB[fileIndex].sharetime);
 
   afterTS = afterTS.map(message => {
     let firstLine = message[0];
@@ -126,6 +226,58 @@ parseFileIntoMessages('chats/2023-08-09.txt', (messages) => {
   });
 
   let messageTypes = filterMessageTypes(afterTS);
-  console.log(messageTypes);
+
+  /**
+   * Process the reaction messages into a more useful format.
+   */
+  messageTypes.reactMessages = messageTypes.reactMessages.map(message => {
+    let reactMessage = parseReactMessage(message);
+    return reactMessage;
+  });
+
+  //console.log(messageTypes.reactMessages);
+
+  for (let shareMessage of messageTypes.shareMessages) {
+    shareMessage.reacts = [];
+  }
+
+  /**
+   * Map the reacts to the shares.
+   */
+  for (let reactMessage of messageTypes.reactMessages) {
+    // find the share message that this react belongs to
+    // this is found by checking the "messageBeginning" property of reactMessage and seeing if it matches the "message" property of shareMessage
+    let shareMessage = messageTypes.shareMessages.find(shareMessage => {
+      //console.log(shareMessage[1], reactMessage.messageBeginning);
+      //console.log('********');
+      //console.log(reactMessage.messageBeginning);
+      // remove the tab from the beginning of the share message
+      let slicedShare = shareMessage[1].slice(1);
+      //console.log(slicedShare);
+      let result = slicedShare.startsWith(reactMessage.messageBeginning);
+      //console.log(result);
+      return result;
+    });
+    //console.log(shareMessage);
+    if (shareMessage ) shareMessage.reacts.push(reactMessage);
+  }
+
+  // console.log(messageTypes.shareMessages);
+
+  /**
+   * Display the share messages and their reactions in a more readable format
+   */
+  for (let shareMessage of messageTypes.shareMessages) {
+    console.log('********')
+    console.log(`${shareMessage[0].timestamp} ${shareMessage[0].sender}`);
+    for (let i = 1; i < shareMessage.length; i++) {
+      console.log(shareMessage[i]);
+    }
+    console.log('');
+    for (let react of shareMessage.reacts) {
+      console.log(`\t${react.sender} ${react.emoji}`);
+    }
+    console.log('********')
+  }
 
 });
