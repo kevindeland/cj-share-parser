@@ -91,6 +91,10 @@ function parseChatLog(chatLog) {
       const messageText = document.createElement("div");
       messageText.classList.add("message-text");
       messageText.textContent = message[1];
+      // ugh there's gotta be a better way to do this
+      for (let i = 2; i < message.length; i++) {
+        messageText.textContent += "\n" + message[i];
+      }
       chatBox.appendChild(messageText);
 
       // Create an emoji container element and style it
