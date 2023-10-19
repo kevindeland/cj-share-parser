@@ -47,3 +47,26 @@ body {
   font-size: 20px; /* Adjust as needed */
   margin-right: 5px; /* Spacing between emojis */
 }
+
+.reply-message {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 5px 0;
+  padding: 5px 10px;
+  max-width: 70%; /* Adjust the maximum width as needed */
+}
+
+.reply-sender {
+  width: 80px; /* Set a fixed width for sender name container */
+  font-weight: bold;
+  color: #5599d4; /* Adjust the color as needed */
+  text-align: left; /* Align sender name text to the left */
+}
+
+.reply-text {
+  flex: 1; /* Allow message to take remaining space */
+  text-align: left; /* Align message text to the left */
+}

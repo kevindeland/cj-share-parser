@@ -153,7 +153,17 @@ function parseChatLog(chatLog) {
       message.replies.forEach((reply) => {
         const replyMessage = document.createElement("div");
         replyMessage.classList.add("reply-message");
-        replyMessage.textContent = `${reply.sender}: ${reply.message}`;
+        
+        const replySender = document.createElement("span");
+        replySender.classList.add("reply-sender");
+        replySender.textContent = reply.sender;
+        replyMessage.appendChild(replySender);
+
+        const replyText = document.createElement("span");
+        replyText.classList.add("reply-text");
+        replyText.textContent = reply.message;
+        replyMessage.appendChild(replyText);
+        
         replyContainer.appendChild(replyMessage);
       });
 
