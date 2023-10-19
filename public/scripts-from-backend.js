@@ -172,3 +172,27 @@ function parseReactMessage(reactMessage) {
     emoji: emoji
   }
 }
+
+
+function parseReplyMessage(replyMessage) {
+
+  let replyLine = replyMessage[1];
+
+  let replyLineRegex = /^\tReplying to "([^"]+)\.\.\."/;
+  let replyLineParts = replyLine.match(replyLineRegex);
+
+  let messageBeginning;
+  try {
+    messageBeginning = replyLineParts[1];
+  } catch {
+    messageBeginning = null;
+  }
+
+  return {
+    timestamp: replyMessage[0].timestamp,
+    sender: replyMessage[0].sender,
+    messageBeginning: messageBeginning,
+    message: replyMessage[3]
+  }
+
+}

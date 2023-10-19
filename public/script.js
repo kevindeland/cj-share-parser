@@ -73,6 +73,40 @@ function parseChatLog(chatLog) {
       if (shareMessage) shareMessage.reacts.push(reactMessage);
     }
 
+    messageTypes.replyMessages = messageTypes.replyMessages.map(message => {
+      let replyMessage = parseReplyMessage(message);
+      return replyMessage;
+    });
+
+    for (let shareMessage of messageTypes.shareMessages) {
+      shareMessage.replies = [];
+    }
+
+    /**
+     * Map the replies to the shares.
+     */
+    for (let replyMessage of messageTypes.replyMessages) {
+
+      console.log('====' + replyMessage.messageBeginning + '====');
+      let shareMessage = messageTypes.shareMessages.find(shareMessage => {
+        // remove the tab at the beginning of the share message
+        let slicedShare = shareMessage[1].slice(1);
+
+        let result = slicedShare.startsWith(replyMessage.messageBeginning);
+
+
+        return result;
+      })
+
+      if (shareMessage) {
+        console.log('√√√');
+        console.log(shareMessage);
+        shareMessage.replies.push(replyMessage);
+      }
+    }
+
+    console.log(messageTypes);
+
     console.log(messageTypes.shareMessages);
 
     // Display each chat message as a chat box
@@ -111,6 +145,19 @@ function parseChatLog(chatLog) {
 
       chatBox.appendChild(emojiContainer);
 
+      // Create a reply container element and style it
+      const replyContainer = document.createElement("div");
+      replyContainer.classList.add("reply-container");
+
+      // Iterate through replies and create reply elements
+      message.replies.forEach((reply) => {
+        const replyMessage = document.createElement("div");
+        replyMessage.classList.add("reply-message");
+        replyMessage.textContent = `${reply.sender}: ${reply.message}`;
+        replyContainer.appendChild(replyMessage);
+      });
+
+      chatBox.appendChild(replyContainer);
 
       chatContainer.appendChild(chatBox);
     });
