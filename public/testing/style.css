@@ -1,0 +1,80 @@
+
+
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+#drop-zone {
+  border: 2px dashed #aaa;
+  padding: 20px;
+  margin: 20px;
+  cursor: pointer;
+}
+
+.pipeline-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.box-container {
+  display: flex;
+  align-items: center;
+}
+
+.box {
+  width: 200px;
+  height: 500px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  overflow-y: scroll;
+  border-radius: 5px;
+  margin-bottom: 40px;
+}
+
+/** these boxes are columinzed left-to-right **/
+.chat-log {
+  margin-right: 10px;
+}
+.message-list {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.filtered-list {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.parsed-list {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.sorted-list {
+  margin-left: 10px;
+}
+
+/** this is the second row of columnized boxes **/
+.sorted-list-2 {
+  margin-right: 10px;
+}
+
+.alchemized-reacts {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+
+
+/** different stuff */
+
+.message {
+  background-color: #e0e0e0;
+  padding: 5px;
+  margin: 5px 0;
+  border-radius: 10px;
+}
+
+.arrow {
+  font-size: 30px;
+}

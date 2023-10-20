@@ -108,7 +108,7 @@ function filterMessagesAfterTimestamp(messages, timestamp)  {
  * 
  * @returns Messages are filtered into three types: Share, Reacts, Replies
  */
-function filterMessageTypes(messages) {
+function sortByMessageTypes(messages) {
 
   // three messages types: Share, Reacts, Replies
   // Share: message[1] default
@@ -145,7 +145,7 @@ function parseReactMessage(reactMessage) {
   // 	I am not awake, 
 	// But I am so alive.
 
-  let reactLine = reactMessage[1];
+  let reactLine = reactMessage.message;
 
   // a regex that looks like this:
   // \tReacted to "${MessageBeginning}..." with ${Emoji}
@@ -166,8 +166,8 @@ function parseReactMessage(reactMessage) {
   }
 
   return {
-    timestamp: reactMessage[0].timestamp,
-    sender: reactMessage[0].sender,
+    timestamp: reactMessage.timestamp,
+    sender: reactMessage.sender,
     messageBeginning: messageBeginning,
     emoji: emoji
   }

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+    <title>Zoom Chat Log Pipeline Viewer</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+  <div id="drop-zone">
+    <h1>Drag and Drop Your Zoom Chat Log Here</h1>
+  </div>
+  <div class="pipeline-container">
+    <div class="box-container">
+      <div class="box chat-log" id="chatLog"></div>
+      <div class="arrow">➡️</div>
+      <div class="box message-list" id="messageList"></div>
+      <div class="arrow">➡️</div>
+      <div class="box filtered-list" id="filteredList"></div>
+      <div class="arrow">➡️</div>
+      <div class="box parsed-list" id="parsedList"></div>
+      <div class="arrow">➡️</div>
+      <div class="box sorted-list" id="sortedList">
+        <div class="sorted-label"><h2>Shares</h2></div>
+        <div class="box sorted-shares" id="sortedShares"></div>
+        <div class="sorted-label"><h2>Reacts</h2></div>
+        <div class="box sorted-reacts" id="sortedReacts"></div>
+        <div class="sorted-label"><h2>Replies</h2></div>
+        <div class="box sorted-replies" id="sortedReplies"></div>
+      </div>
+    </div>
+    <div class="box-container">
+      <div class="box sorted-list-2" id="sortedList2">
+        <div class="sorted-label-2"><h2>Shares</h2></div>
+        <div class="box sorted-shares-2" id="sortedShares2"></div>
+        <div class="sorted-label-2"><h2>Reacts</h2></div>
+        <div class="box sorted-reacts-2" id="sortedReacts2"></div>
+        <div class="sorted-label-2"><h2>Replies</h2></div>
+        <div class="box sorted-replies-2" id="sortedReplies2"></div>
+      </div>
+
+      <div class="arrow">➡️</div>
+      <div class="box alchemized-reacts" id="alchemizedReacts">
+        <div class="sorted-label-2"><h3>Reacts (alchemized)</h3></div>
+        <div class="box alchemized-reacts-list" id="alchemizedReactsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../scripts-from-backend.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>

@@ -2,10 +2,13 @@
 const dropZone = document.getElementById("drop-zone");
 const chatContainer = document.getElementById("chat-container");
 
+let DEBUG_LEVEL = 5;
+
 // Prevent the default drag-and-drop behavior
 dropZone.addEventListener("dragover", (e) => {
     e.preventDefault();
 });
+
 
 // Handle file drop
 dropZone.addEventListener("drop", (e) => {
@@ -31,11 +34,42 @@ dropZone.addEventListener("drop", (e) => {
 
 function parseChatLog(chatLog) {
     // Split the chat log into individual chat messages
-    let messages = parseFileDataIntoMessages(chatLog)
 
-    let afterTS = filterMessagesAfterTimestamp(messages, "09:25:00");
+    if (DEBUG_LEVEL > 4) {
+      console.log(chatLog);
 
-    afterTS = afterTS.map(message => {
+      console.log('--- ⬇️ ---');
+
+      console.log('--✨ parseFileDataIntoMessages ✨--');
+    }
+
+    const messages = parseFileDataIntoMessages(chatLog)
+
+    if (DEBUG_LEVEL > 4) {
+
+      console.log('--- ⬇️ ---');
+
+      console.log(messages);
+
+      console.log('--- ⬇️ ---');
+
+      console.log('-- ✨ filterMessagesAfterTimestamp ✨ --');
+    }
+
+    const afterTS = filterMessagesAfterTimestamp(messages, "09:25:00");
+
+    if (DEBUG_LEVEL > 4) {
+
+      console.log('--- ⬇️ ---');
+
+      console.log(afterTS);
+
+      console.log('--- ⬇️ ---');
+
+      console.log('-- ✨ parseFirstLineIntoParts ✨ --');
+    }
+
+    const afterTSParsed = afterTS.map(message => {
       let firstLine = message[0];
       let firstLineParts = parseFirstLineIntoParts(firstLine);
 
@@ -43,7 +77,18 @@ function parseChatLog(chatLog) {
       return message;
     })
 
-    let messageTypes = filterMessageTypes(afterTS);
+    if (DEBUG_LEVEL > 4) {
+        
+        console.log('--- ⬇️ ---');
+  
+        console.log(afterTSParsed);
+  
+        console.log('--- ⬇️ ---');
+  
+        console.log('-- ✨ sortByMessageTypes ✨ --');
+    }
+
+    let messageTypes = sortByMessageTypes(afterTSParsed);
 
     /** This section is a whole clusterfuck of something */
     messageTypes.reactMessages = messageTypes.reactMessages.map(message => {
