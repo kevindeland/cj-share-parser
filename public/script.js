@@ -115,7 +115,11 @@ function parseChatLog(chatLog) {
         return result;
       })
 
-      if (shareMessage) shareMessage.reacts.push(reactMessage);
+      if (shareMessage) {
+        console.log(reactMessage);
+        shareMessage.reacts.push(reactMessage);
+      }
+
     }
 
     messageTypes.replyMessages = messageTypes.replyMessages.map(message => {
@@ -185,6 +189,10 @@ function parseChatLog(chatLog) {
         const emoji = document.createElement("span");
         emoji.classList.add("emoji");
         emoji.textContent = react.emoji;
+        console.log('EMOJI!!');
+        console.log(JSON.stringify(react));
+        console.log(react.sender);
+        emoji.setAttribute("data-reaction-name", react.sender);
         emojiContainer.appendChild(emoji);
       });
 

@@ -40,12 +40,34 @@ body {
 
 .emoji-container {
   margin-top: 10px;
+  white-space: nowrap; /* Prevent emojis from breaking to a new line */
 }
 
 .emoji {
   display: inline-block;
   font-size: 20px; /* Adjust as needed */
   margin-right: 5px; /* Spacing between emojis */
+  position: relative; /* Required for the tooltip to work */
+}
+
+.emoji::after {
+  content: attr(data-reaction-name); /* Display the reaction name */
+  position: absolute;
+  bottom: 100%;
+  left: 50%; /* Center the tooltip relative to the emoji */
+  padding: 5px;
+  background-color: #000;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0; /* Initially hide the tooltip */
+  pointer-events: none;  /* Allow interaction with the underlying emoji */
+  transition: opacity 0.3s;
+}
+
+.emoji:hover::after {
+  opacity: 1; /* Show the tooltip on hover */
 }
 
 .reply-message {
