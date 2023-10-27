@@ -75,8 +75,8 @@ function parseChatLog(chatLog) {
 
 class TransformationPipeline {
   constructor(initialData, messages, filtered, parsed, sorted, alchemizedReacts) {
-    this.initialData = initialData;
-    this.messages = messages;
+    this.initialData = initialData; // text
+    this.messages = messages;       // array of texts
     this.filtered = filtered;
     this.parsed = parsed;
     this.sorted = sorted;

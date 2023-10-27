@@ -38,19 +38,26 @@ function parseFirstLineIntoParts(firstLine) {
 
   // a regex that looks like this:
   // ${Timestamp} From ${SenderF SenderL} To ${Recipient}:
-  // 09:25:00 From John Doe to Everyone:
-  let firstLineRegex = /^(\d{2}:\d{2}:\d{2}) From (([a-zA-Z]+ )+)to Everyone:/;
+  // example: 09:25:00 From John Doe to Everyone:
+  let firstLineRegex = /^(\d{2}:\d{2}:\d{2}) From ([\w\s-]+) to Everyone:/;
 
   // console.log(firstLine);
   // use the regex to parse the first line
   let firstLineParts = firstLine.match(firstLineRegex);
   // console.log(firstLineParts);
 
+  let timestamp, sender;
+  try {
+    timestamp = firstLineParts[1];
+    sender = firstLineParts[2].trim();
+  } catch {
+    console.log('ERROR parsing first Line:', firstLine);
+    timestamp = null;
+    sender = null;
+  }
   // return an object with the parts
   return {
-    timestamp: firstLineParts[1],
-    // remove trailing whitespace
-    sender: firstLineParts[2].trim(),
+    timestamp, sender
   };
 }
 
@@ -145,22 +152,26 @@ function parseReactMessage(reactMessage) {
   // 	I am not awake, 
 	// But I am so alive.
 
-  let reactLine = reactMessage.message;
+  let reactLine = reactMessage[1];
 
-  // a regex that looks like this:
-  // \tReacted to "${MessageBeginning}..." with ${Emoji}
-  // \tReacted to "I'm doing well. I'm..." with 👍
-  let reactLineRegex = /^\tReacted to "([^"]+)" with ([^"]+)/;
-  let reactLineParts = reactLine.match(reactLineRegex);
-  //console.log(reactLineParts);
-  // remove the last three dots from the message beginning
+  let reactLineRegex, reactLineParts;
   let messageBeginning, emoji;
+
   try {
+    // a regex that looks like this:
+    // \tReacted to "${MessageBeginning}..." with ${Emoji}
+    // \tReacted to "I'm doing well. I'm..." with 👍
+    reactLineRegex = /^\tReacted to "([^"]+)" with ([^"]+)/;
+    reactLineParts = reactLine.match(reactLineRegex);
+    //console.log(reactLineParts);
+    // remove the last three dots from the message beginning
 
     messageBeginning = reactLineParts[1].slice(0, -3);
     emoji = reactLineParts[2];
     // console.log(messageBeginning, emoji);
   } catch {
+    console.log('ERROR!');
+    console.log(reactMessage);
     messageBeginning = null;
     emoji = null;
   }
