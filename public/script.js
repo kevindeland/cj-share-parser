@@ -23,6 +23,11 @@ dropZone.addEventListener("drop", (e) => {
             // Parse the chat log and display messages
             const chatLog = e.target.result;
 
+            // which timezone is selected in the dropdown?
+            // get its value
+            const TIME = document.getElementById("timezone").value + ":00";
+            console.log(TIME);
+
             // -- TODO: dropdown goes here
             parseChatLog(chatLog, TIME);
 
@@ -34,7 +39,7 @@ dropZone.addEventListener("drop", (e) => {
 });
 
 
-function parseChatLog(chatLog) {
+function parseChatLog(chatLog, TIME) {
     // Split the chat log into individual chat messages
 
     if (DEBUG_LEVEL > 4) {
@@ -58,7 +63,7 @@ function parseChatLog(chatLog) {
       console.log('-- ✨ filterMessagesAfterTimestamp ✨ --');
     }
 
-    const afterTS = filterMessagesAfterTimestamp(messages, TIME="08:25:00");
+    const afterTS = filterMessagesAfterTimestamp(messages, TIME);
 
     if (DEBUG_LEVEL > 4) {
 
@@ -159,6 +164,10 @@ function parseChatLog(chatLog) {
     console.log(messageTypes);
 
     console.log(messageTypes.shareMessages);
+
+    if (messageTypes.shareMessages.length === 0) {
+      alert('No messages found. Try chaging the timezone.');
+    }
 
     // Display each chat message as a chat box
     messageTypes.shareMessages.forEach((message) => {
