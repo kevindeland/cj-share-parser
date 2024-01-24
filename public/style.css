@@ -3,6 +3,12 @@ body {
   text-align: center;
 }
 
+#timezone-selector {
+  border: 2px solid #eeeeee;
+  padding: 20px;
+  margin: 20px;
+}
+
 #drop-zone {
   border: 2px dashed #aaa;
   padding: 20px;

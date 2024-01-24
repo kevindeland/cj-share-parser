@@ -22,7 +22,9 @@ dropZone.addEventListener("drop", (e) => {
         reader.onload = function (e) {
             // Parse the chat log and display messages
             const chatLog = e.target.result;
-            parseChatLog(chatLog);
+
+            // -- TODO: dropdown goes here
+            parseChatLog(chatLog, TIME);
 
             //displayParsedChatLog(sampleChatMessages);
         };
@@ -56,7 +58,7 @@ function parseChatLog(chatLog) {
       console.log('-- ✨ filterMessagesAfterTimestamp ✨ --');
     }
 
-    const afterTS = filterMessagesAfterTimestamp(messages, "09:25:00");
+    const afterTS = filterMessagesAfterTimestamp(messages, TIME="08:25:00");
 
     if (DEBUG_LEVEL > 4) {
 

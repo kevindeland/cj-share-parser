@@ -178,7 +178,7 @@ function parseReactMessage(reactMessage) {
 
   return {
     timestamp: reactMessage.timestamp,
-    sender: reactMessage[0].sender,
+    sender: reactMessage[0].sender,// FIXME: there's an inconsistency here... 
     messageBeginning: messageBeginning,
     emoji: emoji
   }

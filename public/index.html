@@ -6,13 +6,35 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <div id="drop-zone">
-        <h1>Drag and Drop Your Zoom Chat Log Here</h1>
-    </div>
-    <div id="chat-container">
-        <!-- Chat messages will be displayed here -->
-    </div>
-    <script src="scripts-from-backend.js"></script>
-    <script src="script.js"></script>
+  <div id="header">
+    <h1>CJ Share Viewer</h1>
+    <p>A more convenient way to view shares from Collective Journaling</p>
+  </div>
+  <div id="timezone-selector">
+    <h2>Step 1: Choose your time zone</h1>
+    <p>Our code filters out messages sent before breakout rooms.</p>
+    <p>What time do the breakout rooms end for you?</p>
+    <!-- <label for="timezone">TimeZone</label> -->
+    <select id="timezone" name="timezone">
+      <option value="06:25">PST - 6:25 AM</option>
+      <option value="07:25">MST - 7:25 AM</option>
+      <option value="08:25">CST - 8:25 AM</option>
+      <option value="09:25" selected>EST - 9:25 AM</option>
+      <option value="10:25">AMT - 10:25 AM</option>
+      <option value="11:25">ART - 11:25 AM</option>
+      <option value="14:25">UTC - 2:25 PM</option>
+      <option value="15:25">CET/WAT - 3:25 PM</option>
+      <option value="16:25">EET - 4:25 PM</option>
+        <!-- Add more options as needed -->
+    </select>
+  </div>
+  <div id="drop-zone">
+      <h2>Step 2: Drag and Drop Your Zoom Chat Log Here</h1>
+  </div>
+  <div id="chat-container">
+      <!-- Chat messages will be displayed here -->
+  </div>
+  <script src="scripts-from-backend.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
